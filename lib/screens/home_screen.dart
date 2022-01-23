@@ -22,10 +22,20 @@ class HomeScreen extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Container(
-              height: 100.0,
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.fromLTRB(15, 5, 15, 0),
               child: const HeaderHEHE(),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: const [TodoCard(), TodoCard()],
+                );
+              },
+              childCount: 25,
             ),
           )
         ],
