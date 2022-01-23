@@ -32,7 +32,10 @@ class HomeScreen extends StatelessWidget {
               (BuildContext context, int index) {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [TodoCard(), TodoCard()],
+                  children: const [
+                    TodoCard(title: "HEHHE"),
+                    TodoCard(title: "WOAH")
+                  ],
                 );
               },
               childCount: 25,
