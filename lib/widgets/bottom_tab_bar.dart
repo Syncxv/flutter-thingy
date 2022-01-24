@@ -1,5 +1,6 @@
 import 'package:appy/config/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class BttomTabBar extends StatelessWidget {
   const BttomTabBar({Key? key}) : super(key: key);
@@ -58,7 +59,7 @@ class BttomTabBar extends StatelessWidget {
                     Color(0xFF4455EE),
                   ],
                 )),
-            child: const _PlusBtn(),
+            child: const PlusBtn(),
           ),
           Container(
             margin: EdgeInsets.only(
@@ -80,9 +81,15 @@ class BttomTabBar extends StatelessWidget {
   }
 }
 
-class _PlusBtn extends StatelessWidget {
-  const _PlusBtn({Key? key}) : super(key: key);
+class PlusBtn extends StatefulWidget {
+  const PlusBtn({Key? key}) : super(key: key);
 
+  @override
+  _PlusBtn createState() => _PlusBtn();
+}
+
+class _PlusBtn extends State<PlusBtn> {
+  Color color = Colors.orange;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -96,49 +103,10 @@ class _PlusBtn extends StatelessWidget {
         ),
       ),
       onPressed: () {
-        final double width = MediaQuery.of(context).size.width;
-        final double halfWidth = width / 2;
         showDialog(
-            context: context,
-            builder: (context) {
-              return Dialog(
-                backgroundColor: Colors.transparent,
-                insetPadding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
-                child: Container(
-                    color: Colors.white,
-                    child: CustomScrollView(
-                      slivers: [
-                        SliverToBoxAdapter(
-                          child: Container(
-                            height: 200,
-                            color: Colors.orange,
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Stack(
-                                children: const [
-                                  Positioned(
-                                    right: 0,
-                                    child: CloseButton(),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: TextField(
-                                      textAlign: TextAlign.center,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'Name of todo :|',
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-              );
-            });
+          context: context,
+          builder: (context) => _PopupDialog(),
+        );
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -155,6 +123,123 @@ class _PlusBtn extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _PopupDialog extends StatefulWidget {
+  const _PopupDialog({Key? key}) : super(key: key);
+
+  @override
+  State<_PopupDialog> createState() => _PopupDialogState();
+}
+
+class _PopupDialogState extends State<_PopupDialog> {
+  Color color = Colors.orange;
+  Widget itemBuilder(
+      Color color, bool isCurrentColor, void Function() changeColor) {
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: Colors.black.withOpacity(0.2)),
+      ),
+      padding: const EdgeInsets.all(4.0),
+      margin: const EdgeInsets.all(7),
+      child: Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: color,
+          boxShadow: [
+            BoxShadow(
+                color: color.withOpacity(0.8),
+                offset: const Offset(1, 2),
+                blurRadius: 5)
+          ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: changeColor,
+            borderRadius: BorderRadius.circular(50),
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 210),
+              opacity: isCurrentColor ? 1 : 0,
+              child: Icon(Icons.done,
+                  color:
+                      useWhiteForeground(color) ? Colors.white : Colors.black),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget layoutBuilder(
+      BuildContext context, List<Color> colors, PickerItem child) {
+    return SizedBox(
+      height: 70,
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(
+          vertical: 10.0,
+          horizontal: 4.0,
+        ),
+        scrollDirection: Axis.horizontal,
+        itemCount: colors.length,
+        itemBuilder: (BuildContext context, int index) {
+          return child(colors[index]);
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
+      child: Container(
+        color: Colors.white,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Container(
+                height: 200,
+                color: color,
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: Stack(
+                    children: const [
+                      Positioned(
+                        right: 0,
+                        child: CloseButton(),
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Name of todo :|',
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: BlockPicker(
+                pickerColor: color,
+                availableColors: availableColors,
+                onColorChanged: (color) => setState(() => this.color = color),
+                layoutBuilder: layoutBuilder,
+                itemBuilder: itemBuilder,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
