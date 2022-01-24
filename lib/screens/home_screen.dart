@@ -54,10 +54,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
             sliver: SliverGrid.count(
               crossAxisCount: 2,
-              crossAxisSpacing: 0,
+              crossAxisSpacing: 20,
+              childAspectRatio: 0.9,
               children: todos != null
                   ? todos!
                       .map((todo) =>
@@ -65,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       .toList()
                   : [],
             ),
-          )
+          ),
         ],
       ),
     );

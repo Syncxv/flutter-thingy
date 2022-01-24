@@ -14,7 +14,7 @@ class TodoCard extends StatelessWidget {
         print(":O very cool $title");
       },
       child: Container(
-        margin: const EdgeInsets.only(top: 20.0),
+        margin: const EdgeInsets.symmetric(vertical: 10),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(14),
           child: Align(
