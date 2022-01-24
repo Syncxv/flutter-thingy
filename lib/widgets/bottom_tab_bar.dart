@@ -44,21 +44,22 @@ class BttomTabBar extends StatelessWidget {
             ),
           ),
           Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                  gradient: const LinearGradient(
-                    stops: [
-                      0.10,
-                      0.93,
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFF16BCFE),
-                      Color(0xFF4455EE),
-                    ],
-                  )),
-              child: _PlusBtn()),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                gradient: const LinearGradient(
+                  stops: [
+                    0.10,
+                    0.93,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFF16BCFE),
+                    Color(0xFF4455EE),
+                  ],
+                )),
+            child: const _PlusBtn(),
+          ),
           Container(
             margin: EdgeInsets.only(
               bottom: bottomMargin,
@@ -95,6 +96,8 @@ class _PlusBtn extends StatelessWidget {
         ),
       ),
       onPressed: () {
+        final double width = MediaQuery.of(context).size.width;
+        final double halfWidth = width / 2;
         showDialog(
             context: context,
             builder: (context) {
@@ -109,6 +112,27 @@ class _PlusBtn extends StatelessWidget {
                           child: Container(
                             height: 200,
                             color: Colors.orange,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Stack(
+                                children: const [
+                                  Positioned(
+                                    right: 0,
+                                    child: CloseButton(),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: TextField(
+                                      textAlign: TextAlign.center,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Name of todo :|',
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ],
