@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class TodoCard extends StatelessWidget {
   final String title;
-
-  const TodoCard({Key? key, required this.title}) : super(key: key);
+  final Color color;
+  const TodoCard({Key? key, required this.title, required this.color})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +20,10 @@ class TodoCard extends StatelessWidget {
           child: Align(
             alignment: Alignment.topLeft,
             child: SizedBox(
-              width: 170,
-              height: 170,
+              width: double.infinity,
+              height: double.infinity,
               child: DecoratedBox(
-                  decoration: const BoxDecoration(color: Colors.red),
+                  decoration: BoxDecoration(color: color),
                   child: Stack(children: [
                     Positioned(
                       top: 8.0,
@@ -30,8 +32,10 @@ class TodoCard extends StatelessWidget {
                         children: [
                           Text(
                             title,
-                            style: const TextStyle(
-                              color: Colors.white,
+                            style: TextStyle(
+                              color: useWhiteForeground(color)
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                           )
                         ],

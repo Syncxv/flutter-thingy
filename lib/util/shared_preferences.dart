@@ -12,3 +12,8 @@ Future<void> saveTodos(String encodedData) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString('todos', encodedData);
 }
+
+Future<void> clearTodos() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.clear();
+}

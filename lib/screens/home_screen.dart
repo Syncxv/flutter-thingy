@@ -1,13 +1,37 @@
+import 'package:appy/models/models.dart';
+import 'package:appy/util/shared_preferences.dart';
 import 'package:appy/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<TodoSection>? todos;
+
+  @override
+  void initState() {
+    _setTodos();
+    super.initState();
+  }
+
+  void _setTodos() async {
+    var data = await getTodos();
+    setState(() {
+      todos = data;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    bool todoExists = todos != null;
     return Scaffold(
       extendBody: true,
-      bottomNavigationBar: BttomTabBar(),
+      bottomNavigationBar: BttomTabBar(setTodos: _setTodos),
       body: CustomScrollView(
         slivers: [
           const SliverAppBar(
@@ -29,18 +53,17 @@ class HomeScreen extends StatelessWidget {
               child: const HeaderHEHE(),
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: const [
-                    TodoCard(title: "HEHHE"),
-                    TodoCard(title: "WOAH")
-                  ],
-                );
-              },
-              childCount: 25,
+          SliverPadding(
+            padding: EdgeInsets.all(8),
+            sliver: SliverGrid.count(
+              crossAxisCount: 2,
+              crossAxisSpacing: 0,
+              children: todos != null
+                  ? todos!
+                      .map((todo) =>
+                          TodoCard(title: todo.name, color: todo.color))
+                      .toList()
+                  : [],
             ),
           )
         ],

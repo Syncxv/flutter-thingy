@@ -7,10 +7,11 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BttomTabBar extends StatelessWidget {
-  const BttomTabBar({Key? key}) : super(key: key);
   final leftRightMargin = 35.0;
   final bottomMargin = 15.0;
   final iconSize = 36.0;
+  void Function() setTodos;
+  BttomTabBar({Key? key, required this.setTodos}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -69,7 +70,7 @@ class BttomTabBar extends StatelessWidget {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (context) => const _PopupDialog(),
+                  builder: (context) => _PopupDialog(setTodos: setTodos),
                 );
               },
             ),
@@ -95,7 +96,8 @@ class BttomTabBar extends StatelessWidget {
 }
 
 class _PopupDialog extends StatefulWidget {
-  const _PopupDialog({Key? key}) : super(key: key);
+  final dynamic setTodos;
+  const _PopupDialog({Key? key, required this.setTodos}) : super(key: key);
 
   @override
   State<_PopupDialog> createState() => _PopupDialogState();
@@ -118,9 +120,10 @@ class _PopupDialogState extends State<_PopupDialog> {
           color: color,
           boxShadow: [
             BoxShadow(
-                color: color.withOpacity(0.8),
-                offset: const Offset(1, 2),
-                blurRadius: 5)
+              color: color.withOpacity(0.8),
+              offset: const Offset(1, 2),
+              blurRadius: 5,
+            )
           ],
         ),
         child: Material(
@@ -131,9 +134,10 @@ class _PopupDialogState extends State<_PopupDialog> {
             child: AnimatedOpacity(
               duration: const Duration(milliseconds: 210),
               opacity: isCurrentColor ? 1 : 0,
-              child: Icon(Icons.done,
-                  color:
-                      useWhiteForeground(color) ? Colors.white : Colors.black),
+              child: Icon(
+                Icons.done,
+                color: useWhiteForeground(color) ? Colors.white : Colors.black,
+              ),
             ),
           ),
         ),
@@ -239,7 +243,11 @@ class _PopupDialogState extends State<_PopupDialog> {
                   icon: false,
                   text: "Create Goal",
                   onPressed: () async {
+                    if (nameController.text.isEmpty) {
+                      return Navigator.pop(context);
+                    }
                     final List<TodoSection> realTodoArry = await getTodos();
+                    print(realTodoArry);
                     final todo = TodoSection(
                       color: color,
                       name: nameController.text,
@@ -248,13 +256,9 @@ class _PopupDialogState extends State<_PopupDialog> {
                     realTodoArry.addAll([todo]);
                     final String encodedData = TodoSection.encode(realTodoArry);
                     await saveTodos(encodedData);
+                    widget.setTodos();
                     Navigator.of(context).pop('dialog');
-                    // todoArray.addAll(jsonEncoded);
-                    // await prefs.setInt('counter', todoArray);
-                    // var decoded = json.decode(encoded);
-                    // var _color = colorFromHex(decoded['color']);
-                    // decoded['color'] = _color;
-                    // print(decoded);
+                    // await clearTodos();
                   },
                 ),
               ),
