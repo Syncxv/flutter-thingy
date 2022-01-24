@@ -1,10 +1,10 @@
 import 'package:appy/config/palette.dart';
 import 'package:appy/models/models.dart';
+import 'package:appy/util/shared_preferences.dart';
 import 'package:appy/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class BttomTabBar extends StatelessWidget {
   const BttomTabBar({Key? key}) : super(key: key);
@@ -239,13 +239,7 @@ class _PopupDialogState extends State<_PopupDialog> {
                   icon: false,
                   text: "Create Goal",
                   onPressed: () async {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-
-                    final todoArrayString = prefs.getString('todos') ?? "[]";
-                    print(todoArrayString);
-                    final List<TodoSection> realTodoArry =
-                        TodoSection.decode(todoArrayString);
+                    final List<TodoSection> realTodoArry = await getTodos();
                     final todo = TodoSection(
                       color: color,
                       name: nameController.text,
@@ -253,8 +247,8 @@ class _PopupDialogState extends State<_PopupDialog> {
                     );
                     realTodoArry.addAll([todo]);
                     final String encodedData = TodoSection.encode(realTodoArry);
-                    print(encodedData);
-                    await prefs.setString('todos', encodedData);
+                    await saveTodos(encodedData);
+                    Navigator.of(context).pop('dialog');
                     // todoArray.addAll(jsonEncoded);
                     // await prefs.setInt('counter', todoArray);
                     // var decoded = json.decode(encoded);
