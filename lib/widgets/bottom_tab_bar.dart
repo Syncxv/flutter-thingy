@@ -1,4 +1,5 @@
 import 'package:appy/config/palette.dart';
+import 'package:appy/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
@@ -59,7 +60,16 @@ class BttomTabBar extends StatelessWidget {
                     Color(0xFF4455EE),
                   ],
                 )),
-            child: const PlusBtn(),
+            child: Button(
+              icon: true,
+              text: "New Goal",
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => const _PopupDialog(),
+                );
+              },
+            ),
           ),
           Container(
             margin: EdgeInsets.only(
@@ -73,53 +83,6 @@ class BttomTabBar extends StatelessWidget {
                 color: Colors.grey.shade600,
                 size: iconSize,
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class PlusBtn extends StatefulWidget {
-  const PlusBtn({Key? key}) : super(key: key);
-
-  @override
-  _PlusBtn createState() => _PlusBtn();
-}
-
-class _PlusBtn extends State<PlusBtn> {
-  Color color = Colors.orange;
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ButtonStyle(
-        shadowColor: MaterialStateProperty.all(Colors.transparent),
-        padding: MaterialStateProperty.all(const EdgeInsets.all(13.0)),
-        shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-      ),
-      onPressed: () {
-        showDialog(
-          context: context,
-          builder: (context) => _PopupDialog(),
-        );
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
-          Text(
-            "New Goal",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
             ),
           ),
         ],
@@ -212,7 +175,7 @@ class _PopupDialogState extends State<_PopupDialog> {
                     children: const [
                       Positioned(
                         right: 0,
-                        child: CloseButton(),
+                        child: WhatCloseButton(),
                       ),
                       Align(
                         alignment: Alignment.center,
@@ -238,6 +201,32 @@ class _PopupDialogState extends State<_PopupDialog> {
                 itemBuilder: itemBuilder,
               ),
             ),
+            SliverToBoxAdapter(
+              child: Container(
+                margin: const EdgeInsets.all(15.0),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    gradient: const LinearGradient(
+                      stops: [
+                        0.10,
+                        0.93,
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0xFF16BCFE),
+                        Color(0xFF4455EE),
+                      ],
+                    )),
+                child: Button(
+                  icon: false,
+                  text: "Create Goal",
+                  onPressed: () {
+                    print("HEHHE");
+                  },
+                ),
+              ),
+            )
           ],
         ),
       ),
