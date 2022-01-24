@@ -19,7 +19,7 @@ class BttomTabBar extends StatelessWidget {
         gradient: const LinearGradient(
           end: Alignment.topCenter,
           begin: Alignment.bottomCenter,
-          stops: [0.10, 0.90],
+          stops: [0.25, 0.90],
           colors: [
             Colors.white,
             Color.fromRGBO(255, 255, 255, 0.0),
@@ -94,7 +94,28 @@ class _PlusBtn extends StatelessWidget {
           ),
         ),
       ),
-      onPressed: () {},
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return Dialog(
+                backgroundColor: Colors.transparent,
+                insetPadding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
+                child: Container(
+                    color: Colors.white,
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: Container(
+                            height: 200,
+                            color: Colors.orange,
+                          ),
+                        ),
+                      ],
+                    )),
+              );
+            });
+      },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: const [
