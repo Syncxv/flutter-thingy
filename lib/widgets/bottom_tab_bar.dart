@@ -1,7 +1,10 @@
 import 'package:appy/config/palette.dart';
+import 'package:appy/models/models.dart';
 import 'package:appy/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class BttomTabBar extends StatelessWidget {
   const BttomTabBar({Key? key}) : super(key: key);
@@ -158,6 +161,7 @@ class _PopupDialogState extends State<_PopupDialog> {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController nameController = TextEditingController();
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
@@ -172,17 +176,30 @@ class _PopupDialogState extends State<_PopupDialog> {
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Stack(
-                    children: const [
-                      Positioned(
+                    children: [
+                      const Positioned(
                         right: 0,
                         child: WhatCloseButton(),
                       ),
                       Align(
                         alignment: Alignment.center,
                         child: TextField(
+                          controller: nameController,
                           textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: useWhiteForeground(color)
+                                ? Colors.white
+                                : Colors.black,
+                            fontSize: 20.0,
+                          ),
                           decoration: InputDecoration(
                             border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: useWhiteForeground(color)
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 20.0,
+                            ),
                             hintText: 'Name of todo :|',
                           ),
                         ),
@@ -214,15 +231,36 @@ class _PopupDialogState extends State<_PopupDialog> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Color(0xFF16BCFE),
-                        Color(0xFF4455EE),
+                        Color(0xFF16E3FE),
+                        Color(0xFF44B0EE),
                       ],
                     )),
                 child: Button(
                   icon: false,
                   text: "Create Goal",
-                  onPressed: () {
-                    print("HEHHE");
+                  onPressed: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+
+                    final todoArrayString = prefs.getString('todos') ?? "[]";
+                    print(todoArrayString);
+                    final List<TodoSection> realTodoArry =
+                        TodoSection.decode(todoArrayString);
+                    final todo = TodoSection(
+                      color: color,
+                      name: nameController.text,
+                      todoItems: [],
+                    );
+                    realTodoArry.addAll([todo]);
+                    final String encodedData = TodoSection.encode(realTodoArry);
+                    print(encodedData);
+                    await prefs.setString('todos', encodedData);
+                    // todoArray.addAll(jsonEncoded);
+                    // await prefs.setInt('counter', todoArray);
+                    // var decoded = json.decode(encoded);
+                    // var _color = colorFromHex(decoded['color']);
+                    // decoded['color'] = _color;
+                    // print(decoded);
                   },
                 ),
               ),
