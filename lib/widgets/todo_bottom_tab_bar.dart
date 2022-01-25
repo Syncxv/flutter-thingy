@@ -45,7 +45,8 @@ class _TodoBttomTabBarState extends State<TodoBttomTabBar> {
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (_) => TaskDaialog(todo: widget.todo),
+                builder: (_) => TaskDaialog(
+                    todo: widget.todo, updateState: widget.setTasks),
               );
             },
           ),
@@ -57,7 +58,9 @@ class _TodoBttomTabBarState extends State<TodoBttomTabBar> {
 
 class TaskDaialog extends StatefulWidget {
   final TodoSection todo;
-  TaskDaialog({Key? key, required this.todo}) : super(key: key);
+  final Future<void> Function() updateState;
+  TaskDaialog({Key? key, required this.todo, required this.updateState})
+      : super(key: key);
 
   @override
   State<TaskDaialog> createState() => Task_DaialogState();
@@ -77,6 +80,7 @@ class Task_DaialogState extends State<TaskDaialog> {
     print(index);
     widget.todo.todoItems.add(
       Todos(
+        id: widget.todo.todoItems.length + 1,
         completed: completed,
         title: taskNameController.text,
         description: taskNameController.text,
@@ -85,7 +89,8 @@ class Task_DaialogState extends State<TaskDaialog> {
     if (index != -1) {
       todos[index] = widget.todo;
       final String encodedData = TodoSection.encode(todos);
-      saveTodos(encodedData);
+      await saveTodos(encodedData);
+      widget.updateState();
     } else {
       Fluttertoast.showToast(
         msg: "OH NO",

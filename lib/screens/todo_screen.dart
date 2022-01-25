@@ -70,7 +70,10 @@ class _TodoScreenState extends State<TodoScreen> {
             todoItems != null
                 ? SliverList(
                     delegate: SliverChildListDelegate(
-                      todoItems!.map((elem) => TaskItem(task: elem)).toList(),
+                      todoItems!
+                          .map(
+                              (elem) => TaskItem(task: elem, todo: widget.todo))
+                          .toList(),
                     ),
                   )
                 : const SliverToBoxAdapter(
@@ -81,18 +84,65 @@ class _TodoScreenState extends State<TodoScreen> {
   }
 }
 
-class TaskItem extends StatelessWidget {
-  final Todos task;
-  const TaskItem({Key? key, required this.task}) : super(key: key);
+class TaskItem extends StatefulWidget {
+  Todos task;
+  final TodoSection todo;
+
+  TaskItem({Key? key, required this.task, required this.todo})
+      : super(key: key);
+
+  @override
+  State<TaskItem> createState() => _TaskItemState();
+}
+
+class _TaskItemState extends State<TaskItem> {
+  Future<void> saveTask() async {
+    //spegiei code gang
+    var todos = await getTodos();
+    var index = todos.indexWhere((element) => element.id == widget.todo.id);
+    var taskIndex = todos[index]
+        .todoItems
+        .indexWhere((element) => element.id == widget.task.id);
+    todos[index].todoItems[taskIndex] = widget.task;
+    print(todos[index].todoItems[taskIndex].completed);
+    final String encodedData = TodoSection.encode(todos);
+    saveTodos(encodedData);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 5.0),
-      margin: EdgeInsets.symmetric(vertical: 4.0),
+      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+      margin: const EdgeInsets.symmetric(vertical: 4.0),
       width: double.infinity,
       color: Colors.black.withOpacity(0.2),
-      child: Text(task.title),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () => setState(() {
+              print("PRESSED");
+              widget.task.completed = !widget.task.completed;
+              saveTask();
+            }),
+            icon: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.blueAccent,
+                ),
+                shape: BoxShape.circle,
+              ),
+              child: Opacity(
+                opacity: widget.task.completed ? 1 : 0,
+                child: const Icon(
+                  Icons.check_circle,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+          ),
+          Text(widget.task.title),
+        ],
+      ),
     );
   }
 }

@@ -30,6 +30,7 @@ class TodoSection {
 
   Map<String, dynamic> toMapCurrentInstance() {
     return {
+      'id': id,
       'name': name,
       //https://stackoverflow.com/a/62554595 this man is a genius
       'color': '#${color.value.toRadixString(16).substring(2, 8)}',
@@ -62,15 +63,19 @@ class TodoSection {
 class Todos {
   final String title;
   final String description;
-  final bool completed;
+  final int id;
+  bool completed;
 
-  Todos(
-      {required this.title,
-      required this.description,
-      required this.completed});
+  Todos({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.completed,
+  });
 
   factory Todos.fromJson(Map<String, dynamic> jsonData) {
     return Todos(
+      id: jsonData['id'],
       title: jsonData['title'],
       description: jsonData['description'],
       completed: jsonData['completed'],
@@ -78,11 +83,17 @@ class Todos {
   }
 
   Map<String, dynamic> toMapCurrent() {
-    return {'title': title, 'description': description, 'completed': completed};
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'completed': completed
+    };
   }
 
   static Map<String, dynamic> toMap(Todos todo) {
     return {
+      'id': todo.id,
       'title': todo.title,
       'description': todo.description,
       'completed': todo.completed
@@ -101,8 +112,10 @@ class Todos {
   static List<Todos> dynamicToListTodos(List<dynamic> dynamicList) =>
       (dynamicList.map(
         (todo) => Todos(
-            title: todo.title,
-            description: todo.description,
-            completed: todo.completed),
+          id: todo.id,
+          title: todo.title,
+          description: todo.description,
+          completed: todo.completed,
+        ),
       )).toList();
 }
