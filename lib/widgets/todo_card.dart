@@ -14,7 +14,26 @@ class TodoCard extends StatelessWidget {
     );
     return GestureDetector(
       onTap: () {
-        print(":O very cool HEHE");
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Scaffold(
+              body: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    "HEHE",
+                    style: TextStyle(
+                      fontSize: 50.0,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
