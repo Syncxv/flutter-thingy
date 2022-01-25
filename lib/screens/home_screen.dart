@@ -67,6 +67,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   : [],
             ),
           ),
+          if (todos != null && !todos!.isEmpty)
+            SliverToBoxAdapter(
+              child: Center(
+                  child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 125.0),
+                child: Button(
+                  icon: false,
+                  text: "Clear",
+                  onPressed: () async {
+                    print(todos?.length);
+                    clearTodos();
+                    _setTodos();
+                  },
+                ),
+              )),
+            )
         ],
       ),
     );
