@@ -6,13 +6,18 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 class TodoSection {
   final Color color;
   final String name;
+  final DateTime dateCreated;
   List<Todos> todoItems;
 
   TodoSection(
-      {required this.name, required this.color, required this.todoItems});
+      {required this.name,
+      required this.color,
+      required this.todoItems,
+      required this.dateCreated});
 
   factory TodoSection.fromJson(Map<String, dynamic> jsonData) {
     return TodoSection(
+      dateCreated: DateTime.parse(jsonData['dateCreated']),
       name: jsonData['name'],
       color: colorFromHex(jsonData['color'])!,
       todoItems: Todos.dynamicToListTodos(jsonData['todoItems']),
@@ -33,6 +38,7 @@ class TodoSection {
         'color':
             '#${todoSection.color.value.toRadixString(16).substring(2, 8)}',
         'todoItems': todoSection.todoItems,
+        'dateCreated': todoSection.dateCreated.toString(),
       };
   static String encode(List<TodoSection> todos) => json.encode(
         todos

@@ -252,6 +252,7 @@ class _PopupDialogState extends State<_PopupDialog> {
                     final List<TodoSection> realTodoArry = await getTodos();
                     print(realTodoArry);
                     final todo = TodoSection(
+                      dateCreated: DateTime.now(),
                       color: color,
                       name: nameController.text,
                       todoItems: [],
