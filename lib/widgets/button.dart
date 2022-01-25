@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
-  final bool icon;
+  final IconData? icon;
   final String text;
   final VoidCallback onPressed;
+  final Color? color;
   const Button(
       {Key? key,
-      required this.icon,
+      this.icon,
       required this.text,
-      required this.onPressed})
+      required this.onPressed,
+      this.color})
       : super(key: key);
 
   @override
@@ -16,6 +18,7 @@ class Button extends StatelessWidget {
     return ElevatedButton(
       style: ButtonStyle(
         shadowColor: MaterialStateProperty.all(Colors.transparent),
+        backgroundColor: MaterialStateProperty.all(color ?? Colors.blue),
         padding: MaterialStateProperty.all(const EdgeInsets.all(13.0)),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
@@ -27,9 +30,9 @@ class Button extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (icon)
-            const Icon(
-              Icons.add,
+          if (icon != null)
+            Icon(
+              icon,
               color: Colors.white,
             ),
           Text(

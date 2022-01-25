@@ -61,11 +61,11 @@ class BttomTabBar extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     Color(0xFF16BCFE),
-                    Color(0xFF4455EE),
+                    Color(0xFFEE4444),
                   ],
                 )),
             child: Button(
-              icon: true,
+              icon: Icons.add,
               text: "New Goal",
               onPressed: () {
                 showDialog(
@@ -98,12 +98,16 @@ class BttomTabBar extends StatelessWidget {
 class _PopupDialog extends StatefulWidget {
   final dynamic setTodos;
   const _PopupDialog({Key? key, required this.setTodos}) : super(key: key);
-
   @override
   State<_PopupDialog> createState() => _PopupDialogState();
 }
 
 class _PopupDialogState extends State<_PopupDialog> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   Color color = Colors.orange;
   TextEditingController nameController = TextEditingController();
   Widget itemBuilder(
@@ -240,7 +244,6 @@ class _PopupDialogState extends State<_PopupDialog> {
                       ],
                     )),
                 child: Button(
-                  icon: false,
                   text: "Create Goal",
                   onPressed: () async {
                     if (nameController.text.isEmpty) {

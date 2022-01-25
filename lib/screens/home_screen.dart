@@ -73,7 +73,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 125.0),
                 child: Button(
-                  icon: false,
                   text: "Clear",
                   onPressed: () async {
                     print(todos?.length);

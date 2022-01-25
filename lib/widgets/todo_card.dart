@@ -33,7 +33,8 @@ class TodoCard extends StatelessWidget {
                           Text(
                             title,
                             style: TextStyle(
-                              color: useWhiteForeground(color)
+                              fontSize: 24.0,
+                              color: useWhiteForeground(color, bias: 100.0)
                                   ? Colors.white
                                   : Colors.black,
                             ),
