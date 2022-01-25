@@ -63,6 +63,7 @@ class Task_DaialogState extends State<TaskDaialog> {
   TextEditingController taskNameController = TextEditingController();
   TextEditingController taskDescriptionController = TextEditingController();
   void submitTask() {
+    print("SUBMITTED");
     Navigator.of(context).pop('dialog');
   }
 
@@ -78,6 +79,7 @@ class Task_DaialogState extends State<TaskDaialog> {
               backgroundColor: Colors.white.withOpacity(0.9),
               centerTitle: true,
               floating: true,
+              automaticallyImplyLeading: false,
               flexibleSpace: TextField(
                 controller: taskNameController,
                 onEditingComplete: submitTask,
@@ -89,7 +91,10 @@ class Task_DaialogState extends State<TaskDaialog> {
                   hintText: "Name Of Task",
                   alignLabelWithHint: true,
                   prefixIcon: IconButton(
-                    onPressed: () => setState(() => completed = !completed),
+                    onPressed: () => setState(() {
+                      print("PRESSED");
+                      completed = !completed;
+                    }),
                     icon: Container(
                       decoration: BoxDecoration(
                         border: Border.all(
