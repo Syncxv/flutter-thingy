@@ -1,9 +1,12 @@
 import 'package:appy/models/models.dart';
+import 'package:appy/util/shared_preferences.dart';
 import 'package:appy/widgets/button.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class TodoBttomTabBar extends StatefulWidget {
-  const TodoBttomTabBar({Key? key}) : super(key: key);
+  final TodoSection todo;
+  const TodoBttomTabBar({Key? key, required this.todo}) : super(key: key);
 
   @override
   State<TodoBttomTabBar> createState() => _TodoBttomTabBarState();
@@ -40,7 +43,7 @@ class _TodoBttomTabBarState extends State<TodoBttomTabBar> {
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (_) => TaskDaialog(),
+                builder: (_) => TaskDaialog(todo: widget.todo),
               );
             },
           ),
@@ -51,7 +54,8 @@ class _TodoBttomTabBarState extends State<TodoBttomTabBar> {
 }
 
 class TaskDaialog extends StatefulWidget {
-  TaskDaialog({Key? key}) : super(key: key);
+  final TodoSection todo;
+  TaskDaialog({Key? key, required this.todo}) : super(key: key);
 
   @override
   State<TaskDaialog> createState() => Task_DaialogState();
@@ -62,8 +66,29 @@ class Task_DaialogState extends State<TaskDaialog> {
   bool completed = false;
   TextEditingController taskNameController = TextEditingController();
   TextEditingController taskDescriptionController = TextEditingController();
-  void submitTask() {
+  TodoSection findTodo(int id, List<TodoSection> list) =>
+      list.firstWhere((todo) => todo.id == id);
+  void submitTask() async {
     print("SUBMITTED");
+    var todos = await getTodos();
+    var index = todos.indexWhere((element) => element.id == widget.todo.id);
+    print(index);
+    widget.todo.todoItems.add(
+      Todos(
+          completed: completed,
+          title: taskNameController.text,
+          description: taskNameController.text),
+    );
+    if (index != -1) {
+      todos[index] = widget.todo;
+      final String encodedData = TodoSection.encode(todos);
+      saveTodos(encodedData);
+    } else {
+      Fluttertoast.showToast(
+        msg: "OH NO",
+        backgroundColor: Colors.red,
+      );
+    }
     Navigator.of(context).pop('dialog');
   }
 

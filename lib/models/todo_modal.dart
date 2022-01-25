@@ -7,16 +7,20 @@ class TodoSection {
   final Color color;
   final String name;
   final DateTime dateCreated;
+  final int id;
   List<Todos> todoItems;
 
-  TodoSection(
-      {required this.name,
-      required this.color,
-      required this.todoItems,
-      required this.dateCreated});
+  TodoSection({
+    required this.name,
+    required this.color,
+    required this.todoItems,
+    required this.dateCreated,
+    required this.id,
+  });
 
   factory TodoSection.fromJson(Map<String, dynamic> jsonData) {
     return TodoSection(
+      id: jsonData['id'],
       dateCreated: DateTime.parse(jsonData['dateCreated']),
       name: jsonData['name'],
       color: colorFromHex(jsonData['color'])!,
@@ -34,12 +38,14 @@ class TodoSection {
   }
 
   static Map<String, dynamic> toMap(TodoSection todoSection) => {
+        'id': todoSection.id,
         'name': todoSection.name,
         'color':
             '#${todoSection.color.value.toRadixString(16).substring(2, 8)}',
         'todoItems': todoSection.todoItems,
         'dateCreated': todoSection.dateCreated.toString(),
       };
+  // !NOOO IT DOESNT WORK
   static String encode(List<TodoSection> todos) => json.encode(
         todos
             .map<Map<String, dynamic>>((todo) => TodoSection.toMap(todo))

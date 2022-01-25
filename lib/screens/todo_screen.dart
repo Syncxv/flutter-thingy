@@ -1,4 +1,5 @@
 import 'package:appy/models/models.dart';
+import 'package:appy/util/shared_preferences.dart';
 import 'package:appy/widgets/todo_bottom_tab_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -12,10 +13,21 @@ class TodoScreen extends StatefulWidget {
 
 class _TodoScreenState extends State<TodoScreen> {
   @override
+  void initState() {
+    super.initState();
+    test();
+  }
+
+  void test() async {
+    var todos = await getTodos();
+    print(todos[0].todoItems);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         extendBody: true,
-        bottomNavigationBar: TodoBttomTabBar(),
+        bottomNavigationBar: TodoBttomTabBar(todo: widget.todo),
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
