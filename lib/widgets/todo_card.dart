@@ -1,4 +1,5 @@
 import 'package:appy/models/models.dart';
+import 'package:appy/screens/todo_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -17,21 +18,7 @@ class TodoCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Scaffold(
-              body: Center(
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text(
-                    "HEHE",
-                    style: TextStyle(
-                      fontSize: 50.0,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            builder: (context) => TodoScreen(todo: todo),
           ),
         );
       },
