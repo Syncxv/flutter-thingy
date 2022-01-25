@@ -4,7 +4,7 @@ import 'package:appy/util/shared_preferences.dart';
 import 'package:appy/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BttomTabBar extends StatelessWidget {
   final leftRightMargin = 35.0;
@@ -247,7 +247,16 @@ class _PopupDialogState extends State<_PopupDialog> {
                   text: "Create Goal",
                   onPressed: () async {
                     if (nameController.text.isEmpty) {
-                      return Navigator.pop(context);
+                      Fluttertoast.showToast(
+                        msg: "Enter a name :|",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.blue,
+                        textColor: Colors.white,
+                        fontSize: 24.0,
+                      );
+                      return;
                     }
                     final List<TodoSection> realTodoArry = await getTodos();
                     print(realTodoArry);
