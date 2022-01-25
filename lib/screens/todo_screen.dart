@@ -12,22 +12,29 @@ class TodoScreen extends StatefulWidget {
 }
 
 class _TodoScreenState extends State<TodoScreen> {
+  List<Todos>? todoItems;
   @override
   void initState() {
     super.initState();
-    test();
+    updateState();
   }
 
-  void test() async {
+  Future<void> updateState() async {
     var todos = await getTodos();
-    print(todos[0].todoItems);
+    var currentTodo =
+        todos.firstWhere((element) => element.id == widget.todo.id);
+    setState(() {
+      todoItems = currentTodo.todoItems;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    print(todoItems);
     return Scaffold(
         extendBody: true,
-        bottomNavigationBar: TodoBttomTabBar(todo: widget.todo),
+        bottomNavigationBar:
+            TodoBttomTabBar(todo: widget.todo, setTasks: updateState),
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
@@ -60,7 +67,32 @@ class _TodoScreenState extends State<TodoScreen> {
                 ),
               ),
             ),
+            todoItems != null
+                ? SliverList(
+                    delegate: SliverChildListDelegate(
+                      todoItems!.map((elem) => TaskItem(task: elem)).toList(),
+                    ),
+                  )
+                : const SliverToBoxAdapter(
+                    child: CircularProgressIndicator(),
+                  )
           ],
         ));
+  }
+}
+
+class TaskItem extends StatelessWidget {
+  final Todos task;
+  const TaskItem({Key? key, required this.task}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 5.0),
+      margin: EdgeInsets.symmetric(vertical: 4.0),
+      width: double.infinity,
+      color: Colors.black.withOpacity(0.2),
+      child: Text(task.title),
+    );
   }
 }

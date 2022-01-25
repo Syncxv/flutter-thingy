@@ -6,7 +6,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class TodoBttomTabBar extends StatefulWidget {
   final TodoSection todo;
-  const TodoBttomTabBar({Key? key, required this.todo}) : super(key: key);
+  final Future<void> Function() setTasks;
+  const TodoBttomTabBar({Key? key, required this.todo, required this.setTasks})
+      : super(key: key);
 
   @override
   State<TodoBttomTabBar> createState() => _TodoBttomTabBarState();
