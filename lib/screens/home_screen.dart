@@ -61,8 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
               childAspectRatio: 0.9,
               children: todos != null
                   ? todos!
-                      .map((todo) =>
-                          TodoCard(title: todo.name, color: todo.color))
+                      .map(
+                        (todo) => TodoCard(todo: todo),
+                      )
                       .toList()
                   : [],
             ),

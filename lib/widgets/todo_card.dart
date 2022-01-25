@@ -1,17 +1,20 @@
+import 'package:appy/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class TodoCard extends StatelessWidget {
-  final String title;
-  final Color color;
-  const TodoCard({Key? key, required this.title, required this.color})
-      : super(key: key);
+  final TodoSection todo;
+  const TodoCard({Key? key, required this.todo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final timeidk = timeago.format(
+      todo.dateCreated,
+    );
     return GestureDetector(
       onTap: () {
-        print(":O very cool $title");
+        print(":O very cool HEHE");
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
@@ -23,30 +26,74 @@ class TodoCard extends StatelessWidget {
               width: double.infinity,
               height: double.infinity,
               child: DecoratedBox(
-                  decoration: BoxDecoration(color: color),
-                  child: Stack(children: [
-                    Positioned(
-                      top: 8.0,
-                      left: 8.0,
-                      child: Column(
+                decoration: BoxDecoration(color: todo.color),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            title,
+                            todo.name,
                             style: TextStyle(
+                              fontWeight: FontWeight.bold,
                               fontSize: 24.0,
-                              color: useWhiteForeground(color, bias: 100.0)
+                              color: useWhiteForeground(todo.color, bias: 100.0)
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                          Text(
+                            timeidk,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14.0,
+                              color: useWhiteForeground(todo.color, bias: 100.0)
                                   ? Colors.white
                                   : Colors.black,
                             ),
                           )
                         ],
                       ),
-                    ),
-                  ])),
+                      TodoCardFotter(todo: todo),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+}
+
+class TodoCardFotter extends StatelessWidget {
+  final TodoSection todo;
+
+  const TodoCardFotter({Key? key, required this.todo}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Text(
+        "0 of ${todo.todoItems.length}",
+        style: TextStyle(
+          fontSize: 18.0,
+          color: useWhiteForeground(todo.color, bias: 100.0)
+              ? Colors.white
+              : Colors.black,
+        ),
+      ),
+      CircularProgressIndicator(
+        value: 0.4,
+        backgroundColor: Colors.white.withOpacity(0.5),
+        valueColor: const AlwaysStoppedAnimation(Colors.white),
+      )
+    ]);
   }
 }
