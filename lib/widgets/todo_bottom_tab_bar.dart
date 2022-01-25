@@ -75,9 +75,10 @@ class Task_DaialogState extends State<TaskDaialog> {
     print(index);
     widget.todo.todoItems.add(
       Todos(
-          completed: completed,
-          title: taskNameController.text,
-          description: taskNameController.text),
+        completed: completed,
+        title: taskNameController.text,
+        description: taskNameController.text,
+      ),
     );
     if (index != -1) {
       todos[index] = widget.todo;

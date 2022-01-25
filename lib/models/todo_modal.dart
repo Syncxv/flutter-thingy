@@ -24,7 +24,7 @@ class TodoSection {
       dateCreated: DateTime.parse(jsonData['dateCreated']),
       name: jsonData['name'],
       color: colorFromHex(jsonData['color'])!,
-      todoItems: Todos.dynamicToListTodos(jsonData['todoItems']),
+      todoItems: Todos.dynamicToListTodos(Todos.decode(jsonData['todoItems'])),
     );
   }
 
@@ -42,15 +42,16 @@ class TodoSection {
         'name': todoSection.name,
         'color':
             '#${todoSection.color.value.toRadixString(16).substring(2, 8)}',
-        'todoItems': todoSection.todoItems,
+        'todoItems': Todos.encode(todoSection.todoItems),
         'dateCreated': todoSection.dateCreated.toString(),
       };
-  // !NOOO IT DOESNT WORK
-  static String encode(List<TodoSection> todos) => json.encode(
-        todos
-            .map<Map<String, dynamic>>((todo) => TodoSection.toMap(todo))
-            .toList(),
-      );
+  static String encode(List<TodoSection> todos) {
+    var listy = todos
+        .map<Map<String, dynamic>>((todo) => TodoSection.toMap(todo))
+        .toList();
+    print(listy);
+    return json.encode(listy);
+  }
 
   static List<TodoSection> decode(String todoSections) =>
       (json.decode(todoSections) as List<dynamic>)
@@ -76,9 +77,21 @@ class Todos {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMapCurrent() {
     return {'title': title, 'description': description, 'completed': completed};
   }
+
+  static Map<String, dynamic> toMap(Todos todo) {
+    return {
+      'title': todo.title,
+      'description': todo.description,
+      'completed': todo.completed
+    };
+  }
+
+  static String encode(List<Todos> todos) => json.encode(
+        todos.map<Map<String, dynamic>>((todo) => Todos.toMap(todo)).toList(),
+      );
 
   static List<Todos> decode(String todos) =>
       (json.decode(todos) as List<dynamic>)
