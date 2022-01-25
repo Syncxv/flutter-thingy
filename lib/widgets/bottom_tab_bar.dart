@@ -105,6 +105,7 @@ class _PopupDialog extends StatefulWidget {
 
 class _PopupDialogState extends State<_PopupDialog> {
   Color color = Colors.orange;
+  TextEditingController nameController = TextEditingController();
   Widget itemBuilder(
       Color color, bool isCurrentColor, void Function() changeColor) {
     return Container(
@@ -165,7 +166,6 @@ class _PopupDialogState extends State<_PopupDialog> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController nameController = TextEditingController();
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.fromLTRB(0, 45, 0, 0),
