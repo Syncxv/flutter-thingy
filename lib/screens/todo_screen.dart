@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 
 class TodoScreen extends StatefulWidget {
   final TodoSection todo;
-  const TodoScreen({Key? key, required this.todo}) : super(key: key);
+  final void Function() setTodos;
+  const TodoScreen({Key? key, required this.todo, required this.setTodos})
+      : super(key: key);
 
   @override
   State<TodoScreen> createState() => _TodoScreenState();
@@ -35,6 +37,7 @@ class _TodoScreenState extends State<TodoScreen> {
         extendBody: true,
         bottomNavigationBar:
             TodoBttomTabBar(todo: widget.todo, setTasks: updateState),
+        backgroundColor: Colors.grey[200],
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
@@ -47,9 +50,10 @@ class _TodoScreenState extends State<TodoScreen> {
                   ),
                   child: IconButton(
                     onPressed: () {
+                      widget.setTodos();
                       Navigator.pop(context);
                     },
-                    icon: Icon(Icons.close),
+                    icon: const Icon(Icons.close),
                     iconSize: 30.0,
                     color: Colors.black,
                   ),
@@ -68,12 +72,15 @@ class _TodoScreenState extends State<TodoScreen> {
               ),
             ),
             todoItems != null
-                ? SliverList(
-                    delegate: SliverChildListDelegate(
-                      todoItems!
-                          .map(
-                              (elem) => TaskItem(task: elem, todo: widget.todo))
-                          .toList(),
+                ? SliverPadding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    sliver: SliverList(
+                      delegate: SliverChildListDelegate(
+                        todoItems!
+                            .map((elem) =>
+                                TaskItem(task: elem, todo: widget.todo))
+                            .toList(),
+                      ),
                     ),
                   )
                 : const SliverToBoxAdapter(
@@ -115,7 +122,7 @@ class _TaskItemState extends State<TaskItem> {
       padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
       margin: const EdgeInsets.symmetric(vertical: 4.0),
       width: double.infinity,
-      color: Colors.black.withOpacity(0.2),
+      color: Colors.white,
       child: Row(
         children: [
           IconButton(
@@ -140,7 +147,22 @@ class _TaskItemState extends State<TaskItem> {
               ),
             ),
           ),
-          Text(widget.task.title),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.task.title,
+                style: TextStyle(fontSize: 18),
+              ),
+              Text(
+                "Task",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[700],
+                ),
+              )
+            ],
+          ),
         ],
       ),
     );

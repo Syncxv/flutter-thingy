@@ -62,7 +62,10 @@ class _HomeScreenState extends State<HomeScreen> {
               children: todos != null
                   ? todos!
                       .map(
-                        (todo) => TodoCard(todo: todo),
+                        (todo) => TodoCard(
+                          todo: todo,
+                          setTodos: _setTodos,
+                        ),
                       )
                       .toList()
                   : [],

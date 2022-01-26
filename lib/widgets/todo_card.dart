@@ -6,7 +6,10 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class TodoCard extends StatelessWidget {
   final TodoSection todo;
-  const TodoCard({Key? key, required this.todo}) : super(key: key);
+  final void Function() setTodos;
+
+  const TodoCard({Key? key, required this.todo, required this.setTodos})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +21,7 @@ class TodoCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => TodoScreen(todo: todo),
+            builder: (context) => TodoScreen(todo: todo, setTodos: setTodos),
           ),
         );
       },
@@ -83,11 +86,19 @@ class TodoCardFotter extends StatelessWidget {
 
   const TodoCardFotter({Key? key, required this.todo}) : super(key: key);
 
+  int getCompleted() =>
+      todo.todoItems.where((element) => element.completed).toList().length;
+
   @override
   Widget build(BuildContext context) {
+    final stringThing = todo.todoItems.isEmpty
+        ? "0 of 0"
+        : "${getCompleted()} of ${todo.todoItems.length}";
+    final double val =
+        todo.todoItems.isEmpty ? 0.0 : getCompleted() / todo.todoItems.length;
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Text(
-        "0 of ${todo.todoItems.length}",
+        stringThing,
         style: TextStyle(
           fontSize: 18.0,
           color: useWhiteForeground(todo.color, bias: 100.0)
@@ -96,9 +107,15 @@ class TodoCardFotter extends StatelessWidget {
         ),
       ),
       CircularProgressIndicator(
-        value: 0.4,
-        backgroundColor: Colors.white.withOpacity(0.5),
-        valueColor: const AlwaysStoppedAnimation(Colors.white),
+        value: val,
+        backgroundColor: useWhiteForeground(todo.color, bias: 100.0)
+            ? Colors.white.withOpacity(0.5)
+            : Colors.black.withOpacity(0.5),
+        valueColor: AlwaysStoppedAnimation(
+          useWhiteForeground(todo.color, bias: 100.0)
+              ? Colors.white
+              : Colors.black,
+        ),
       )
     ]);
   }
